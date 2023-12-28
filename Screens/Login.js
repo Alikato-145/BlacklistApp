@@ -1,24 +1,10 @@
 import { ImageBackground, StyleSheet, View, Text, Image, TextInput, TouchableOpacity } from 'react-native'
 import { Button } from '@rneui/themed';
-import pb from '../lib/pocketbase'
 import React from 'react'
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 const App = ({ navigation }) => {
-  const [Gmail, onChangeGmail] = React.useState('');
-  const [Password, onChangePassword] = React.useState('');
-  const [data, setData] = useState([]);
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const fetchedData = await pb.collection("test").getOne('n03n24g2m4kouim');
-        setData(fetchedData);
-        console.log(data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    getData();
-  }, []);
+  const [Gmail, onChangeGmail] = useState('');
+  const [Password, onChangePassword] = useState('');
   return (
     <View style={styles.container}>
       <ImageBackground source={require("../img/BG_page.png")} resizeMode="cover" style={styles.image} >

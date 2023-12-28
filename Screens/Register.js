@@ -13,9 +13,9 @@ function Register({ navigation }) {
   const check = async () => {
     try {
       const data = {
-        "email": "test@example.com",
-        "password": "12345678",
-        "passwordConfirm": "12345678",
+        "email": Gmail,
+        "password": Password,
+        "passwordConfirm": PasswordCon,
       };
       console.log(data);
       await pb.collection('users').create(data);

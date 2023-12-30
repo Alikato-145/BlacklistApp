@@ -1,10 +1,28 @@
-import { ImageBackground, StyleSheet, View, Text, Image, TextInput, TouchableOpacity } from 'react-native'
+import { ImageBackground, StyleSheet, View, Image, TextInput,Text, TouchableOpacity } from 'react-native'
 import { Button } from '@rneui/themed';
 import React from 'react'
-import { useState } from 'react';
+import { useState ,useEffect} from 'react';
 const App = ({ navigation }) => {
   const [Gmail, onChangeGmail] = useState('');
   const [Password, onChangePassword] = useState('');
+  
+  const Regis = async () => {
+    try {
+        await pb.collection('users').authWithPassword(
+        Gmail,
+        Password,
+    );
+      navigation.navigate("Recent");
+    } catch (e) {
+      if (e instanceof ClientResponseError) {
+        console.log("Server error:", e.response.status, e.response.data);
+      } else {
+
+        console.log("Unexpected error:", e);
+      }
+    }
+  }
+
   return (
     <View style={styles.container}>
       <ImageBackground source={require("../img/BG_page.png")} resizeMode="cover" style={styles.image} >

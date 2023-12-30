@@ -1,13 +1,18 @@
 import { StyleSheet, Text, View, Image, ImageBackground,ScrollView, TouchableOpacity } from 'react-native'
 import { Button } from '@rneui/themed';
-import React from 'react'
+import React,{ useEffect } from 'react'
 import ImageViewer from 'react-native-image-zoom-viewer';
-const Detail = ({navigation}) => {
-    const[clickPicture,onChangeclickPicture] = React.useState(false)
+const Detail = ({navigation,route}) => {
+    const {id, Name, Surname, date,NameProduct,Price,BankName,Bank,Idcard,PhoneNum} = route.params;
+    const[clickPicture,onChangeclickPicture] = React.useState(false);
     const [navOpen,OnChangenavOpen] = React.useState(false);
+
+    useEffect(() => {
+        console.log(route.params);
+    });
     const onPressPicture =(source) =>{  
         navigation.navigate('Imagezoom', { source });
-    }
+    };
     return (
     <>
         <ImageBackground source={require("../img/BG_page.png")} style={styles.ImageBackground}>
@@ -49,17 +54,17 @@ const Detail = ({navigation}) => {
             </View>
             <View style={styles.box}>
                 <Text style={styles.TextBoxTopic}>เลขบัตรประชาชน:
-                <Text style={styles.TextBoxDetail}>1-111-111111-11</Text></Text>
+                <Text style={styles.TextBoxDetail}>{Idcard}</Text></Text>
                  <Text style={styles.TextBoxTopic}>ชื่อผู้โกง:
-                <Text style={styles.TextBoxDetail}>นายมนัส เตชะพัตราภรณ์</Text></Text>
+                <Text style={styles.TextBoxDetail}>{Name} {Surname}</Text></Text>
                  <Text style={styles.TextBoxTopic}>เบอร์โทร:
-                <Text style={styles.TextBoxDetail}>000-000-0000</Text></Text>
+                <Text style={styles.TextBoxDetail}>{PhoneNum}</Text></Text>
                  <Text style={styles.TextBoxTopic}>ธนาคาร:
-                <Text style={styles.TextBoxDetail}>กสกร</Text></Text>
+                <Text style={styles.TextBoxDetail}>{BankName}</Text></Text>
+                <Text style={styles.TextBoxTopic}>บัญชีธนาคาร:
+                <Text style={styles.TextBoxDetail}>{Bank}</Text></Text>
                 <Text style={styles.TextBoxTopic}>วันโอนเงิน:
-                <Text style={styles.TextBoxDetail}>10/11/2566</Text></Text>
-                <Text style={styles.TextBoxTopic}>วันประกาศโพสต์:
-                <Text style={styles.TextBoxDetail}>10/11/2566 22:33</Text></Text>
+                <Text style={styles.TextBoxDetail}>{date}</Text></Text>
             </View>
 
             <View style={styles.navbar}>
@@ -103,7 +108,7 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         position:'absolute',
         paddingTop:20,
-        top:660,
+        top:620,
         bottom:0,
         left:0,
         right:0,
@@ -164,15 +169,15 @@ const styles = StyleSheet.create({
         borderColor: "rgba(160, 82, 172, 1.0)"
     },
     box:{        
-        padding:10,
-        width: 340,
-        height: 290,
+        padding:5,
+        width: 330,
+        height: 250,
         borderRadius: 30,
         backgroundColor: "#FFFFFF",
         marginBottom:100,
     },
     TextBoxTopic:{
-        margin:15,
+        margin:10,
         fontSize: 18,
         fontWeight: "700",
         fontStyle: "normal",
@@ -201,7 +206,7 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         width:160,
         height:270,
-        margin:0
+
     },
     PictureDetails:{
         width:150,

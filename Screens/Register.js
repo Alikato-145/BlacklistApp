@@ -10,9 +10,10 @@ function Register({ navigation }) {
   const [Gmail, onChangeGmail] = React.useState('');
   const [PasswordCon, onChangePasswordCon] = React.useState('');
 
-  const check = async () => {
+  const Regis = async () => {
     try {
       const data = {
+        "username": Username,
         "email": Gmail,
         "password": Password,
         "passwordConfirm": PasswordCon,
@@ -84,7 +85,7 @@ function Register({ navigation }) {
             containerStyle={{
               marginBottom: 10
             }}
-            onPress={check}
+            onPress={Regis}
           />
           <Text style={styles.text}>Manus Techaphattrapron</Text>
         </View>

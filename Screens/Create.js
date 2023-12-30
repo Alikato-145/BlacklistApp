@@ -1,16 +1,52 @@
-import { StyleSheet, Text, View, Image, ImageBackground, TextInput, TouchableOpacity,ScrollView } from 'react-native'
+import { StyleSheet, Text, View, Image, ImageBackground, TextInput, TouchableOpacity,ScrollView,Alert} from 'react-native'
 import { Button } from '@rneui/themed';
 import React from 'react'
 import { Logs } from 'expo';
+import pb from '../lib/pocketbase';
 
 const Create = ({ navigation }) => {
     const [Bank, onChangeBank] = React.useState('');
-    const [Backname, onChangeBankname] = React.useState('');
+    const [BankName, onChangeBankname] = React.useState('');
     const [Idcard, onChangeIdcard] = React.useState('');
     const [Name, onChangeName] = React.useState('');
     const [Surname, onChangeSurname] = React.useState('');
     const [PhoneNum, onChangePhoneNum] = React.useState('');
+    const [NameProduct,onChangeNameProduct] = React.useState('');
+    const [Price,onChangePrice] = React.useState('');
+    const [date,onchangeDate] = React.useState(''); 
     const [navOpen,OnChangenavOpen] = React.useState(false);
+    const CreatePost = async () => {
+        try {
+            // bank length = 10 
+            // IDcard length=13
+            if (Bank.length <10 || Idcard.length <13){
+                Alert.alert('Your Bank number or IDcard Invaild','Please try again')
+                return;
+            }
+          const data = {
+            "BankName": BankName,
+            "Name": Name,
+            "Surname": Surname,
+            "NameProduct": NameProduct,
+            "Price": Price,
+            "date": date,
+            "Bank": Bank,
+            "Idcard": Idcard,
+            "PhoneNum": PhoneNum
+          };
+          console.log(data);
+          await pb.collection('Post').create(data);
+          navigation.navigate("Search");
+        } catch (e) {
+          if (e instanceof ClientResponseError) {
+            console.log("Server error:", e.response.status, e.response.data);
+          } else {
+    
+            console.log("Unexpected error:", e);
+          }
+        }
+      }
+    
     return (
         <>
             <ImageBackground source={require("../img/BG_page.png")} style={styles.ImageBackground}>
@@ -48,11 +84,11 @@ const Create = ({ navigation }) => {
                                 value={Bank}
                                 placeholder="เลขบัญชีธนาคาร"/>
                         <Text style={styles.HeadInput}>
-                        ธนาคาร
+                        ธนาคาร/แอปที่โอนเงิน
                         </Text>
                         <TextInput style={styles.TextInput}
                                 onChangeText={onChangeBankname}
-                                value={Backname}
+                                value={BankName}
                                 placeholder="ชื่อบัญชีธนาคาร"/>
                         <Text style={styles.HeadInput}>
                         บัตรประชาชน
@@ -86,22 +122,22 @@ const Create = ({ navigation }) => {
                         สินค้าที่โดนโกง
                         </Text>
                         <TextInput style={styles.TextInput}
-                                onChangeText={onChangePhoneNum}
-                                value={PhoneNum}
+                                onChangeText={onChangeNameProduct}
+                                value={NameProduct}
                                 placeholder="ชื่อสินค้า"/>
                         <Text style={styles.HeadInput}>
                         ราคา(บาท)
                         </Text>
                         <TextInput style={styles.TextInput}
-                                onChangeText={onChangePhoneNum}
-                                value={PhoneNum}
+                                onChangeText={onChangePrice}
+                                value={Price}
                                 placeholder="ราคา"/>
                         <Text style={styles.HeadInput}>
                         วันที่โอนเงิน
                         </Text>
                         <TextInput style={styles.TextInput}
-                                onChangeText={onChangePhoneNum}
-                                value={PhoneNum}
+                                onChangeText={onchangeDate}
+                                value={date}
                                 placeholder="วันโอนเงิน Ex.01/12/2566"/>
                         <View style={styles.container}>
                             <Button
@@ -113,10 +149,10 @@ const Create = ({ navigation }) => {
                                     backgroundColor: "#FFB800"
                                 }}
                                 titleStyle={{ fontWeight: 'bold', fontSize: 23,color: "#0E599E"}}
-                                onPress={() => console.log("Hello world")}
+                                onPress={CreatePost}
                                 />
                         </View>
-                        <View style={{height:40}}></View>
+                        <View style={{height:80}}></View>
                     </ScrollView>
                 </View>
                 <View style={styles.navbar}>
@@ -182,7 +218,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#FFFFFF",
     },
     HeadInput: {
-        width: 167,
+        width: 250,
         height: 29,
         fontWeight: "700",
         fontSize: 20,

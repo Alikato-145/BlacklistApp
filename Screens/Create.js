@@ -3,7 +3,7 @@ import { Button } from '@rneui/themed';
 import React from 'react'
 import { Logs } from 'expo';
 import pb from '../lib/pocketbase';
-
+import { launchImageLibraryAsync } from "expo-image-picker";
 const Create = ({ navigation }) => {
     const [Bank, onChangeBank] = React.useState('');
     const [BankName, onChangeBankname] = React.useState('');
@@ -14,6 +14,7 @@ const Create = ({ navigation }) => {
     const [NameProduct,onChangeNameProduct] = React.useState('');
     const [Price,onChangePrice] = React.useState('');
     const [date,onchangeDate] = React.useState(''); 
+    const [ImageDetail,onChnageImageDetail] =React.useState('');
     const [navOpen,OnChangenavOpen] = React.useState(false);
     const CreatePost = async () => {
         try {
@@ -23,6 +24,7 @@ const Create = ({ navigation }) => {
                 Alert.alert('Your Bank number or IDcard Invaild','Please try again')
                 return;
             }
+          const ImageDetail = OpenLib();
           const data = {
             "BankName": BankName,
             "Name": Name,
@@ -32,7 +34,8 @@ const Create = ({ navigation }) => {
             "date": date,
             "Bank": Bank,
             "Idcard": Idcard,
-            "PhoneNum": PhoneNum
+            "PhoneNum": PhoneNum,
+            "ImageDetail":ImageDetail,
           };
           console.log(data);
           await pb.collection('Post').create(data);
@@ -46,6 +49,13 @@ const Create = ({ navigation }) => {
           }
         }
       }
+    const OpenLib = async () =>{
+        const result = await launchImageLibraryAsync();
+        onChnageImageDetail(result);
+        console.log(result);
+        return result;
+        
+    }
     
     return (
         <>
@@ -139,10 +149,15 @@ const Create = ({ navigation }) => {
                                 onChangeText={onchangeDate}
                                 value={date}
                                 placeholder="วันโอนเงิน Ex.01/12/2566"/>
+                        <TouchableOpacity style={styles.ImageAdd} onPress={OpenLib}>
+                            <Image source={require('../icon/Image_icon.png')}/>
+                            <Text style={styles.HeadImage}>เพิ่มรูปภาพ</Text>
+                        </TouchableOpacity>
                         <View style={styles.container}>
                             <Button
                                 title="สร้างโพสต์"
                                 buttonStyle={{
+                                    alignSelf:'center',
                                     width: 150,
                                     height: 50,
                                     borderRadius: 30,
@@ -225,6 +240,12 @@ const styles = StyleSheet.create({
         marginLeft: 30,
         color: "#0E599E"
     },
+    HeadImage:{
+        fontWeight: "700",
+        fontSize: 20,
+        color: "#0E599E",
+        textAlign:'center',
+    },
     TextInput: {
         width: 250,
         marginLeft: 30,
@@ -263,6 +284,16 @@ const styles = StyleSheet.create({
         right:10 ,
         top:15,
     },
+    ImageAdd:{
+        width:200,
+        height:100,
+        borderWidth:1,
+        justifyContent:'center',
+        alignItems:'center',
+        alignSelf:'center',
+        marginVertical:20,
+    },
+
     IconNavRecent:{
         marginLeft:85,
         marginRight:45,

@@ -10,16 +10,9 @@ import Profile from './Screens/Profile';
 import Recent from './Screens/Recent';
 import Detail from './Screens/Detail';
 import Create from './Screens/Create';
-import ImageDetail from './Screens/ImageDetail';
 import Research from './Screens/Research';
-import { useFonts } from 'expo-font';
 const Stack = createNativeStackNavigator();
 const MyStack = () => {
-  const [fontsLoaded] = useFonts({
-    'OpenSans-Italic': require('./assets/fonts/OpenSans-Italic.ttf'),
-    
-  });
-
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -34,9 +27,8 @@ const MyStack = () => {
         <Stack.Screen name="Profile" component={Profile} />
         <Stack.Screen name="Recent" component={Recent} />
         <Stack.Screen name="Detail" component={Detail} />
-        <Stack.Screen name="ImageDetail" component={ImageDetail} />
         <Stack.Screen name="Create" component={Create} />
-        <Stack.Screen name="Research" component={Research} />
+        <Stack.Screen name="Reserch" component={Create} />
       </Stack.Navigator>
     </NavigationContainer>
   );

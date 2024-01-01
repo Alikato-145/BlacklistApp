@@ -13,6 +13,10 @@ const Recent = ({ navigation }) => {
             const records = await pb.collection('Post').getFullList({
                 sort: '-created',
             });
+            const ImageAll = await pb.collection('Image').getFullList({
+                sort: '-created',
+            });
+            console.log(ImageAll);
             onChangeItems([...records])
         }
         Post();

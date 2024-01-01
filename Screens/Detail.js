@@ -12,7 +12,7 @@ const Detail = ({navigation,route}) => {
     });
     const onPressPicture =(source) =>{  
         navigation.navigate('Imagezoom', { source });
-    };
+    }
     return (
     <>
         <ImageBackground source={require("../img/BG_page.png")} style={styles.ImageBackground}>
@@ -47,7 +47,7 @@ const Detail = ({navigation,route}) => {
             </Text>
             <View style={styles.Line}></View>
             <View style={styles.PictureContainer}>
-                <TouchableOpacity onPress={() => onPressPicture("../img/Test1.png")}>
+                <TouchableOpacity >
                     <Image source={require("../img/Test1.png")} style={styles.PictureDetails}/>
                 </TouchableOpacity>
                 <Image source={require("../img/Test2.jpg")} style={styles.PictureDetails}/>
@@ -62,7 +62,7 @@ const Detail = ({navigation,route}) => {
                  <Text style={styles.TextBoxTopic}>ธนาคาร:
                 <Text style={styles.TextBoxDetail}>{BankName}</Text></Text>
                 <Text style={styles.TextBoxTopic}>บัญชีธนาคาร:
-                <Text style={styles.TextBoxDetail}>{Bank}</Text></Text>
+                <Text style={styles.TextBoxDetail}>{date}</Text></Text>
                 <Text style={styles.TextBoxTopic}>วันโอนเงิน:
                 <Text style={styles.TextBoxDetail}>{date}</Text></Text>
             </View>

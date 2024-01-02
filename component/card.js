@@ -5,13 +5,13 @@ const card = ({navigation,id,Name, NameProduct,Surname,Price,date}) => {
   return (
     <View style={styles.box}>
                 <Text style={styles.TextBoxTopic}>ชื่อผู้โกง:
-                <Text style={styles.TextBoxDetail} key="{Name,Surname}">{Name} {Surname}</Text></Text>
+                <Text style={styles.TextBoxDetail}>{Name} {Surname}</Text></Text>
                  <Text style={styles.TextBoxTopic}>สินค้าที่โดนโกง:
-                <Text style={styles.TextBoxDetail} key="{NameProduct}">{NameProduct}</Text></Text>
+                <Text style={styles.TextBoxDetail}>{NameProduct}</Text></Text>
                  <Text style={styles.TextBoxTopic}>ราคา:
-                <Text style={styles.TextBoxDetail} key="{Price}">{Price} บาท</Text></Text>
+                <Text style={styles.TextBoxDetail}>{Price} บาท</Text></Text>
                  <Text style={styles.TextBoxTopic}>วันโอนเงิน:
-                <Text style={styles.TextBoxDetail} key="{date}">{date}</Text></Text>
+                <Text style={styles.TextBoxDetail}>{date}</Text></Text>
     </View>
   )
 }

@@ -3,16 +3,20 @@ import { Button } from '@rneui/themed';
 import React,{ useEffect } from 'react'
 import ImageViewer from 'react-native-image-zoom-viewer';
 const Detail = ({navigation,route}) => {
-    const {id, Name, Surname, date,NameProduct,Price,BankName,Bank,Idcard,PhoneNum} = route.params;
+    const {id, Name, Surname, date,NameProduct,Price,BankName,Bank,Idcard,PhoneNum,ImgDetail} = route.params;
     const[clickPicture,onChangeclickPicture] = React.useState(false);
     const [navOpen,OnChangenavOpen] = React.useState(false);
-
+    const imagePaths = {
+        'receipt1_eQTih6hezJ.jpg': require('../img/receipt1_eQTih6hezJ.jpg'),
+        'receipt2_Og107sEp6p.jpg': require('../img/receipt2_Og107sEp6p.jpg'),
+        'receipt3_g0baUhCMty.jpg': require('../img/receipt3_g0baUhCMty.jpg'),
+        'receipt4_EqUblum4Tj.jpg': require('../img/receipt4_EqUblum4Tj.jpg'),
+        'receipt5_2zhMXC3TCe.jpg': require('../img/receipt5_2zhMXC3TCe.jpg'),
+      };
+      
     useEffect(() => {
-        console.log(route.params);
+        console.log(ImgDetail);
     });
-    const onPressPicture =(source) =>{  
-        navigation.navigate('Imagezoom', { source });
-    }
     return (
     <>
         <ImageBackground source={require("../img/BG_page.png")} style={styles.ImageBackground}>
@@ -47,10 +51,7 @@ const Detail = ({navigation,route}) => {
             </Text>
             <View style={styles.Line}></View>
             <View style={styles.PictureContainer}>
-                <TouchableOpacity >
-                    <Image source={require("../img/Test1.png")} style={styles.PictureDetails}/>
-                </TouchableOpacity>
-                <Image source={require("../img/Test2.jpg")} style={styles.PictureDetails}/>
+            <Image source={imagePaths[ImgDetail]} style={styles.PictureDetails} />
             </View>
             <View style={styles.box}>
                 <Text style={styles.TextBoxTopic}>เลขบัตรประชาชน:
@@ -62,7 +63,7 @@ const Detail = ({navigation,route}) => {
                  <Text style={styles.TextBoxTopic}>ธนาคาร:
                 <Text style={styles.TextBoxDetail}>{BankName}</Text></Text>
                 <Text style={styles.TextBoxTopic}>บัญชีธนาคาร:
-                <Text style={styles.TextBoxDetail}>{date}</Text></Text>
+                <Text style={styles.TextBoxDetail}>{Bank}</Text></Text>
                 <Text style={styles.TextBoxTopic}>วันโอนเงิน:
                 <Text style={styles.TextBoxDetail}>{date}</Text></Text>
             </View>
@@ -177,7 +178,7 @@ const styles = StyleSheet.create({
         marginBottom:100,
     },
     TextBoxTopic:{
-        margin:10,
+        margin:8,
         fontSize: 18,
         fontWeight: "700",
         fontStyle: "normal",

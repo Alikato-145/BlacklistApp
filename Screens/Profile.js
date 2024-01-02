@@ -1,13 +1,73 @@
 import { StyleSheet, Text, View,Image,ImageBackground,TextInput,TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Button } from '@rneui/themed';
-
+import pb from '../lib/pocketbase';
 const Profile = ({navigation}) => {
     const [Name, onChangeName] = React.useState('');
-    const [Gmail,onChangeGmail] = React.useState('');
-    const [Facekbook,onChnageFacebook] = React.useState('');
     const [Twitter,onChangeTwitter] = React.useState('');
+    const [Facebook,onChangeFacebook] = React.useState('');
     const [Edit,onChangeEdit] = React.useState(true);
+    const InputsFilled = () => {
+        const result =
+            Name.trim() !== '' ||
+            Twitter.trim() !== '' ||
+            Facebook.trim() !== '';
+        return result;
+    };
+    useEffect(() => {
+        const Profile = async () => {
+            try {
+                const record = await pb.collection('users').getOne('6yer5gcd9ljfm5u', {
+                    expand: 'relField1',
+                });
+                if (record) {
+                    const { Facebook, username, Twitter } = record;
+                    onChangeName(username)
+                    onChangeFacebook(Facebook)
+                    onChangeTwitter(Twitter)
+                } else {
+                    console.log('Record not found');
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        };
+    
+        Profile();
+    }, []); 
+    
+    
+    const updateProfile = async () => {
+        try {
+            if (InputsFilled()) {
+                const data = {};
+                
+                // Add conditions for each TextInput field with a value
+                if (Facebook.trim() !== '') {
+                    data.Facebook = Facebook;
+                }
+                if (Name.trim() !== '') {
+                    data.Username = Name;
+                }
+                if (Twitter.trim() !== '') {
+                    data.Twitter = Twitter;
+                }
+                // Update the user record only if there is any data to update
+                if (Object.keys(data).length > 0) {
+                    const recordId = '6yer5gcd9ljfm5u'; // Replace with the actual record ID
+                    const record = await pb.collection('users').update(recordId, data);
+                    console.log(data);
+                } else {
+                    console.log('No data to update.');
+                }
+            }
+            onChangeEdit(true);
+        } catch (e) {
+            console.log(e);
+        }
+        
+    };
+    
   return (
     <>
         <ImageBackground source={require("../img/BG_page.png")} style={styles.ImageBackground}>
@@ -23,22 +83,17 @@ const Profile = ({navigation}) => {
             <View style={styles.box}>
             {Edit && (
                 <Text style={styles.Textbox}>
-                ชื่อ : มนัส เตชะพัตราภรณ์  
+                ชื่อ : {Name} 
                 </Text>
             )}
             {Edit && (
                 <Text style={styles.Textbox}>
-                อีเมล์ : ALikato@gmail.com
+                เฟสบุ๊ค : {Facebook}
                 </Text>
             )}
             {Edit && (
                 <Text style={styles.Textbox}>
-                เฟสบุ๊ค : Manus Techaphattrapron
-                </Text>
-            )}
-            {Edit && (
-                <Text style={styles.Textbox}>
-                ทวิตเตอร์ : -   
+                ทวิตเตอร์ : {Twitter}   
                 </Text>
                 )}
                 {Edit && (
@@ -46,7 +101,7 @@ const Profile = ({navigation}) => {
                 <Button
                     title="แก้ไข"
                     buttonStyle={{
-                        marginTop:20,
+                        marginTop:82,
                         width: 150,
                         height: 50,
                         borderRadius: 30,
@@ -61,32 +116,26 @@ const Profile = ({navigation}) => {
                 <TextInput style={styles.TextInput}
                                 onChangeText={onChangeName}
                                 value={Name}
-                                placeholder="มนัส เตชะพัตราภรณ์"/>
+                                placeholder={Name}/>
             )}
             {!Edit && (
                 <TextInput style={styles.TextInput}
-                                onChangeText={onChangeGmail}
-                                value={Gmail}
-                                placeholder="ALikato@gmail.com"/>
-            )}
-            {!Edit && (
-                <TextInput style={styles.TextInput}
-                                onChangeText={onChangeName}
-                                value={Name}
-                                placeholder="Manus Techaphattrapron"/>
+                                onChangeText={onChangeFacebook}
+                                value={Facebook}
+                                placeholder={Facebook}/>
             )}
             {!Edit && (
                 <TextInput style={styles.TextInput}
                                 onChangeText={onChangeTwitter}
                                 value={Twitter}
-                                placeholder="-"/>
+                                placeholder={Twitter}/>
             )}
             {!Edit && (
                 <View style={styles.container}>
                 <Button
                     title="เสร็จสิ้น"
                     buttonStyle={{
-                        marginTop:20,
+                        marginTop:82,
                         width: 150,
                         height: 50,
                         borderRadius: 30,
@@ -97,7 +146,7 @@ const Profile = ({navigation}) => {
                                     position:'absolute',
                                     top:7,
                                 }}
-                    onPress={() => onChangeEdit(true)}
+                    onPress={() =>updateProfile()}
                     />
                 </View>
             )}
@@ -106,20 +155,10 @@ const Profile = ({navigation}) => {
                 <TouchableOpacity  onPress={()=> navigation.navigate("Search")}>
                     <Image source={require("../icon/Search.png")} style={styles.IconNav}></Image> 
                 </TouchableOpacity>
-                <Button
-                                title="ค้นหา"
-                                buttonStyle={{
-                                    marginLeft:20,
-                                    padding:0,
-                                    width: 110,
-                                    height: 40,
-                                    borderRadius: 40,
-                                    backgroundColor: "#FFE500"
-                                }}
-                                titleStyle={{ fontWeight: 'bold', fontSize: 23,color: "#0E599E"}}
-                                onPress={() => console.log("Hello world")}
-                                />
-                <Image source={require("../icon/add.png")} style={styles.IconNav}></Image>
+                <TouchableOpacity onPress={() => navigation.navigate("Recent")}>
+                        <Image source={require("../icon/Recent.png")} style={styles.IconNavRecent}></Image>
+                    </TouchableOpacity>
+                <Image source={require("../icon/add.png")} style={styles.IconAdd}></Image>
             </View>
         </View> 
         </ImageBackground>
@@ -147,13 +186,13 @@ const styles = StyleSheet.create({
     },
     navbar:{
         alignContent: 'center',
-        flexDirection:'row',
-        position:'absolute',
-        paddingTop:20,
-        top:620,
-        bottom:0,
-        left:0,
-        right:0,
+        flexDirection: 'row',
+        position: 'absolute',
+        paddingTop: 20,
+        top: 620,
+        bottom: 0,
+        left: 0,
+        right: 0,
         width: 420,
         height: 75,
         borderTopLeftRadius: 50,
@@ -163,13 +202,13 @@ const styles = StyleSheet.create({
         backgroundColor: "rgba(255, 255, 255, 1)"
     },
     IconNav:{
-        marginLeft:60,
-        marginRight:30,
-        bottom:0,
-        right:0,
-        left:0,
-        width:40,
-        height:40,
+        marginLeft: 50,
+        marginRight: 10,
+        bottom: 0,
+        right: 0,
+        left: 0,
+        width: 40,
+        height: 40,
     },
     Topic: {
         marginTop: 50,
@@ -213,4 +252,20 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderColor: 'rgba(160, 82, 172, 1.0)',
     },
+    IconNavRecent: {
+        marginLeft: 90,
+        bottom: 0,
+        right: 0,
+        left: 0,
+        width: 40,
+        height: 40,
+    },
+    IconAdd:{
+        marginLeft: 90,
+        bottom: 0,
+        right: 0,
+        left: 0,
+        width: 40,
+        height: 40,
+    }
 })

@@ -1,25 +1,25 @@
-import { ImageBackground, StyleSheet, View, Image, TextInput,Text, TouchableOpacity } from 'react-native'
+import { ImageBackground, StyleSheet, View, Image, TextInput,Text, TouchableOpacity,Alert} from 'react-native'
 import { Button } from '@rneui/themed';
 import React from 'react'
 import { useState ,useEffect} from 'react';
+import pb from '../lib/pocketbase';
+
 const App = ({ navigation }) => {
   const [Gmail, onChangeGmail] = useState('');
   const [Password, onChangePassword] = useState('');
-  
-  const Regis = async () => {
-    try {
-        await pb.collection('users').authWithPassword(
-        Gmail,
-        Password,
-    );
-      navigation.navigate("Recent");
-    } catch (e) {
-      if (e instanceof ClientResponseError) {
-        console.log("Server error:", e.response.status, e.response.data);
-      } else {
 
-        console.log("Unexpected error:", e);
+  const Loginhandle = async () => {
+    try {
+      if (Password.length < 8) {
+        Alert.alert("Your password invaild", "Your password more than 8 character.")
+        return
       }
+      // else {
+      //   const userData = await pb.collection('users').authWithPassword(Gmail,Password);
+      // }
+      navigation.navigate('Search')
+    } catch (e) {
+      console.log(e);
     }
   }
 
@@ -61,7 +61,7 @@ const App = ({ navigation }) => {
               marginHorizontal: 50,
               marginVertical: 10,
             }}
-            onPress={() => navigation.navigate('Search')}
+            onPress={Loginhandle}
           />
           <Text style={styles.text}>Forgot Password?</Text>
           <Button

@@ -10,22 +10,43 @@ function Register({ navigation }) {
   const [Gmail, onChangeGmail] = React.useState('');
   const [PasswordCon, onChangePasswordCon] = React.useState('');
 
+  const areInputsFilled = () => {
+    const result =
+      Username.trim() !== '' &&
+      Gmail.trim() !== '' &&
+      Password.trim() !== '' &&
+      PasswordCon.trim() !== '';
+      console.log('areInputsFilled result:', result);
+    return result;
+  }
   const Regis = async () => {
     try {
-      const data = {
-        "username": Username,
-        "email": Gmail,
-        "password": Password,
-        "passwordConfirm": PasswordCon,
-      };
-      console.log(data);
-      await pb.collection('users').create(data);
-      navigation.navigate("Login");
+      // don't have filed empty 
+      if (areInputsFilled() == true) {
+        if (Password.length < 8) {
+          Alert.alert("Your password invaild", "Your password more than 8 character.")
+          return
+        }
+        else {
+          const data = {
+            "username": Username,
+            "email": Gmail,
+            "password": Password,
+            "passwordConfirm": PasswordCon,
+          };
+          await pb.collection('users').create(data);
+          navigation.navigate("Login");
+        }
+      } 
+      // have filed empty
+      else {
+        Alert.alert("Please try again", "Your filed have empty.")
+      }
+
     } catch (e) {
       if (e instanceof ClientResponseError) {
         console.log("Server error:", e.response.status, e.response.data);
       } else {
-
         console.log("Unexpected error:", e);
       }
     }

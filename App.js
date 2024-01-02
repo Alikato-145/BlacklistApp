@@ -28,7 +28,7 @@ const MyStack = () => {
         <Stack.Screen name="Recent" component={Recent} />
         <Stack.Screen name="Detail" component={Detail} />
         <Stack.Screen name="Create" component={Create} />
-        <Stack.Screen name="Reserch" component={Create} />
+        <Stack.Screen name="Research" component={Research} />
       </Stack.Navigator>
     </NavigationContainer>
   );

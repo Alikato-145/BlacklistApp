@@ -4,17 +4,8 @@ import React, { useEffect } from 'react'
 import { Logs } from 'expo';
 import Card from '../component/card';
 const Search = ({ navigation, route }) => {
-
     const [navOpen, OnChangenavOpen] = React.useState(false);;
     const Items = route.params.resultList.items;
-
-
-    useEffect(() => {
-        console.log(Items);
-
-    })
-
-
     return (
         <>
             <ImageBackground source={require("../img/BG_page.png")} style={styles.ImageBackground}>
@@ -47,11 +38,11 @@ const Search = ({ navigation, route }) => {
                     <Text style={styles.Topic}>ค้นหา</Text>
                     <View style={styles.Line}></View>
                     <ScrollView>
-                        {Items.map(({ id, Name, Surname, date, NameProduct, Price, BankName, Bank, Idcard, PhoneNum }) => (
+                        {Items.map(({ id, Name, Surname, date, NameProduct, Price, BankName, Bank, Idcard, PhoneNum,ImgDetail}) => (
                             <TouchableOpacity
                                 key={id} // Add a unique key prop here
                                 onPress={() =>
-                                    navigation.navigate("Detail", { id, Name, Surname, date, NameProduct, Price, BankName, Bank, Idcard, PhoneNum })
+                                    navigation.navigate("Detail", { id, Name, Surname, date, NameProduct, Price, BankName, Bank, Idcard, PhoneNum,ImgDetail})
                                 }
                             >
                                 <Card key={id} id={id} Name={Name} Surname={Surname} date={date} NameProduct={NameProduct} Price={Price} />

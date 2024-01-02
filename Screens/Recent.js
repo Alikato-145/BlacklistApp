@@ -4,7 +4,9 @@ import React, { useEffect } from 'react'
 import Card from '../component/card';
 import Detail from './Detail';
 import pb from '../lib/pocketbase';
-
+const delay = ms => new Promise(
+  resolve => setTimeout(resolve, ms)
+);
 const Recent = ({ navigation }) => {
     const [Items, onChangeItems] = React.useState([]);
     const [navOpen, OnChangenavOpen] = React.useState(false);
@@ -13,10 +15,7 @@ const Recent = ({ navigation }) => {
             const records = await pb.collection('Post').getFullList({
                 sort: '-created',
             });
-            const ImageAll = await pb.collection('Image').getFullList({
-                sort: '-created',
-            });
-            console.log(ImageAll);
+            await delay(1000);
             onChangeItems([...records])
         }
         Post();
@@ -53,11 +52,11 @@ const Recent = ({ navigation }) => {
                     </Text>
                     <View style={styles.Line}></View>
                     <ScrollView>
-                        {Items.map(({ id, Name, Surname, date, NameProduct, Price, BankName, Bank, Idcard, PhoneNum}) => (
+                        {Items.map(({ id, Name, Surname, date, NameProduct, Price, BankName, Bank, Idcard, PhoneNum,ImgDetail}) => (
                             <TouchableOpacity
                                 key={id} // Add a unique key prop here
                                 onPress={() =>
-                                    navigation.navigate("Detail", { id, Name, Surname, date, NameProduct, Price, BankName, Bank, Idcard, PhoneNum })
+                                    navigation.navigate("Detail", { id, Name, Surname, date, NameProduct, Price, BankName, Bank, Idcard, PhoneNum,ImgDetail })
                                 }
                             >
                                 <Card key={id} id={id} Name={Name} Surname={Surname} date={date} NameProduct={NameProduct} Price={Price} />

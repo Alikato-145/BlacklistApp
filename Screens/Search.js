@@ -1,10 +1,9 @@
 import { StyleSheet, Text, View, Image, ImageBackground, TextInput, TouchableOpacity, ScrollView,Alert } from 'react-native'
 import { Button } from '@rneui/themed';
 import React, { useEffect } from 'react'
-import { Logs } from 'expo';
 import pb from '../lib/pocketbase';
-
 const Search = ({ navigation }) => {
+
     const [Bank, onChangeBank] = React.useState('');
     const [BankName, onChangeBankname] = React.useState('');
     const [Idcard, onChangeIdcard] = React.useState('');
@@ -13,7 +12,6 @@ const Search = ({ navigation }) => {
     const [PhoneNum, onChangePhoneNum] = React.useState('');
     const [navOpen, OnChangenavOpen] = React.useState(false);
 
-    const [Items, onChangeItems] = React.useState([]);
     const areInputsFilled = () => {
         const result =
             Bank.trim() !== '' ||
@@ -22,7 +20,6 @@ const Search = ({ navigation }) => {
             Name.trim() !== '' ||
             Surname.trim() !== '' ||
             PhoneNum.trim() !== '';
-
         console.log('areInputsFilled result:', result);
         return result;
     };
@@ -54,7 +51,7 @@ const Search = ({ navigation }) => {
                 if (PhoneNum.trim() !== '') {
                     filters.push(`PhoneNum ~'${PhoneNum}'`);
                 }
-                // Combine the filters with 'AND' to form the final filter string
+                // Combine the filters with '&&' to form the final filter string
                 const filter = filters.join(' && ');
                 console.log(filter);
                 const resultList = await pb.collection('Post').getList(1, 20, {
